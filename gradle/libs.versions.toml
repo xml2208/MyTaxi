@@ -8,6 +8,8 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
+map-box = "11.6.0-rc.1"
+location-services = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,6 +26,10 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+location-services = { group = "com.google.android.gms", name = "play-services-location", version.ref = "location-services"}
+map-box = { group = "com.mapbox.maps", name = "android", version.ref = "map-box" }
+map-box-compose = { group = "com.mapbox.extension", name = "maps-compose", version.ref = "map-box" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
