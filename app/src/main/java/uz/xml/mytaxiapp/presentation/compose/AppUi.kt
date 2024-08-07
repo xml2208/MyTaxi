@@ -14,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.animation.viewport.MapViewportState
 import com.mapbox.maps.extension.compose.style.MapStyle
 import uz.xml.mytaxiapp.R
 
 @Composable
-internal fun MapView(
+internal fun AppUi(
     modifier: Modifier,
     mapViewportState: MapViewportState,
     moveToCurrentLocation: () -> Unit,

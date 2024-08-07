@@ -60,6 +60,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.compose)
     implementation(libs.location.services)
     implementation(libs.map.box)
     implementation(libs.map.box.compose)
