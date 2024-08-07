@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chevron_bcg">#F5F6F9</color>
+    <color name="map_control_button_">#4A91FB</color>
+    <color name="map_control_button_gray">#818AB0</color>
 </resources>

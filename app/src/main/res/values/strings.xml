@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyTaxiApp</string>
+    <string name="tarif">Tarif</string>
+    <string name="orders">Buyurtmalar</string>
+    <string name="bordur">Bordur</string>
+    <string name="busy">Band</string>
+    <string name="active">Faol</string>
 </resources>
