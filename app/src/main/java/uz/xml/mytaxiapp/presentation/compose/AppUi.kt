@@ -38,6 +38,12 @@ internal fun AppUi(
             currentLocation = currentLocation,
             isNeededToMoveCurrentLocation = isNeededToMoveCurrentLocation,
         )
+        MapTopBar(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 48.dp,)
+        )
         Row(
             modifier = Modifier
                 .align(Alignment.Center)
