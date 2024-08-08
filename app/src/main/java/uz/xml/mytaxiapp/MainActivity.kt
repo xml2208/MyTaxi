@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import uz.xml.mytaxiapp.presentation.MainViewModel
@@ -22,9 +23,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             val viewModel by viewModel<MainViewModel>()
             val cameraOptionsState by viewModel.cameraOptions.collectAsState()
-
             val mapViewportState = rememberMapViewportState {
                 cameraOptionsState?.let(::setCameraOptions)
             }
@@ -32,12 +33,13 @@ class MainActivity : ComponentActivity() {
             MyTaxiAppTheme {
                 AppUi(
                     modifier = Modifier.fillMaxSize(),
-                    mapViewportState = mapViewportState.apply {
-                        cameraOptionsState?.let(::setCameraOptions)
+                    mapViewportState = mapViewportState.apply { cameraOptionsState?.let(::setCameraOptions) },
+                    moveToCurrentLocation = {
+                        viewModel.setEvent(MyTaxiViewEvents.MoveToCurrentLocation(this))
                     },
-                    moveToCurrentLocation = {},
                     zoomIn = { viewModel.setEvent(MyTaxiViewEvents.ZoomIn(mapViewportState.cameraState?.zoom)) },
                     zoomOut = { viewModel.setEvent(MyTaxiViewEvents.ZoomOut(mapViewportState.cameraState?.zoom)) },
+                    currentLocation = Point.fromLngLat(69.244796,41.332116)
                 )
             }
         }

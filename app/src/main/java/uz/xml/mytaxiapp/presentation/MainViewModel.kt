@@ -1,6 +1,14 @@
 package uz.xml.mytaxiapp.presentation
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +34,7 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
         when (event) {
             is MyTaxiViewEvents.ZoomIn -> zoomIn(event.currentZoom ?: 0.0)
             is MyTaxiViewEvents.ZoomOut -> zoomOut(event.currentZoom ?: 0.0)
+            is MyTaxiViewEvents.MoveToCurrentLocation -> getCurrentLocation(event.activity)
         }
     }
 
@@ -51,4 +60,30 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
         }
         setState { MyTaxiViewState(zoomLevel = cameraOptions.value?.zoom ?: currentZoom) }
     }
-}
+
+    private fun fusedLocationClient(context: Context): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
+
+    private fun getCurrentLocation(activity: Activity) {
+            if (ActivityCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    1
+                )
+            } else {
+                fusedLocationClient(activity).lastLocation.addOnSuccessListener { location ->
+                    location?.let {
+                        Log.d("xml22", "getCurrentLocation: $location")
+                    }
+                }
+            }
+        }
+    }

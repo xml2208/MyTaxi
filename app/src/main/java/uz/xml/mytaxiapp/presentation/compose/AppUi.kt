@@ -14,26 +14,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.geojson.Point
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.animation.viewport.MapViewportState
-import com.mapbox.maps.extension.compose.style.MapStyle
 import uz.xml.mytaxiapp.R
 
 @Composable
 internal fun AppUi(
-    modifier: Modifier,
     mapViewportState: MapViewportState,
     moveToCurrentLocation: () -> Unit,
     zoomIn: () -> Unit,
     zoomOut: () -> Unit,
+    currentLocation: Point,
+    modifier: Modifier = Modifier,
     style: String = Style.TRAFFIC_DAY,
 ) {
     Box(modifier = modifier) {
-        MapboxMap(
+        MapView(
             modifier = Modifier,
             mapViewportState = mapViewportState,
-            style = { MapStyle(style = style) }
+            style = style,
+            currentLocation = currentLocation
         )
         Row(
             modifier = Modifier
@@ -43,7 +44,10 @@ internal fun AppUi(
         ) {
             MapControlButton(
                 modifier = Modifier
-                    .background(color = colorResource(R.color.chevron_bcg), shape = RoundedCornerShape(14.dp)),
+                    .background(
+                        color = colorResource(R.color.chevron_bcg),
+                        shape = RoundedCornerShape(14.dp)
+                    ),
                 icon = R.drawable.ic_chevrons, iconTint = R.color.map_control_button_gray,
                 onClick = { }
             )
