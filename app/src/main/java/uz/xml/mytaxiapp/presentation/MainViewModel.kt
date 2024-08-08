@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -14,19 +13,20 @@ import com.mapbox.maps.CameraOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import uz.xml.mytaxiapp.data.di.MyTaxiLngLt
 import uz.xml.mytaxiapp.presentation.base.BaseViewModel
 
 class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
 
-    private val tashkentMapDefaultPosition = Point.fromLngLat(69.2401, 41.2995)
-
     private val _cameraOptions = MutableStateFlow<CameraOptions?>(null)
     val cameraOptions = _cameraOptions.asStateFlow()
 
+    private val _currentLocation = MutableStateFlow(TASHKENT_POSITION)
+
     init {
         _cameraOptions.value = CameraOptions.Builder()
-            .zoom(10.0)
-            .center(tashkentMapDefaultPosition)
+            .center(Point.fromLngLat(TASHKENT_POSITION.longitude, TASHKENT_POSITION.latitude))
+            .zoom(DEFAULT_ZOOM_CITY_VIEW)
             .build()
     }
 
@@ -39,7 +39,7 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
     }
 
     override fun setInitialState(): MyTaxiViewState =
-        MyTaxiViewState()
+        MyTaxiViewState(currentLocation = TASHKENT_POSITION)
 
     private fun zoomIn(currentZoom: Double) {
         viewModelScope.launch {
@@ -48,7 +48,6 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
                 .build()
             _cameraOptions.emit(cameraOptions)
         }
-        setState { MyTaxiViewState(zoomLevel = cameraOptions.value?.zoom ?: currentZoom) }
     }
 
     private fun zoomOut(currentZoom: Double) {
@@ -58,32 +57,39 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
                 .build()
             _cameraOptions.emit(cameraOptions)
         }
-        setState { MyTaxiViewState(zoomLevel = cameraOptions.value?.zoom ?: currentZoom) }
     }
 
     private fun fusedLocationClient(context: Context): FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
     private fun getCurrentLocation(activity: Activity) {
-            if (ActivityCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    1
-                )
-            } else {
-                fusedLocationClient(activity).lastLocation.addOnSuccessListener { location ->
-                    location?.let {
-                        Log.d("xml22", "getCurrentLocation: $location")
-                    }
+        if (ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        } else {
+            fusedLocationClient(activity).lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    _currentLocation.value =
+                        MyTaxiLngLt(latitude = location.latitude, longitude = location.longitude)
+                    setState { MyTaxiViewState(currentLocation = _currentLocation.value) }
                 }
             }
         }
     }
+
+    companion object {
+        const val DEFAULT_ZOOM_CITY_VIEW = 6.0
+        val TASHKENT_POSITION = MyTaxiLngLt(longitude = 69.2401, latitude = 41.2995)
+    }
+
+}

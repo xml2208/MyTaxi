@@ -28,13 +28,15 @@ internal fun AppUi(
     currentLocation: Point,
     modifier: Modifier = Modifier,
     style: String = Style.TRAFFIC_DAY,
+    isNeededToMoveCurrentLocation: Boolean,
 ) {
     Box(modifier = modifier) {
         MapView(
             modifier = Modifier,
             mapViewportState = mapViewportState,
             style = style,
-            currentLocation = currentLocation
+            currentLocation = currentLocation,
+            isNeededToMoveCurrentLocation = isNeededToMoveCurrentLocation,
         )
         Row(
             modifier = Modifier
