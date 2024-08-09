@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -18,6 +19,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.mapbox.geojson.Point
+import com.mapbox.maps.Style
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import uz.xml.mytaxiapp.presentation.MainViewModel
@@ -33,14 +35,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             val viewModel by viewModel<MainViewModel>()
             val cameraOptionsState by viewModel.cameraOptions.collectAsState()
             val mapViewportState =
                 rememberMapViewportState { cameraOptionsState?.let(::setCameraOptions) }
             val currentLocationState = viewModel.viewState.value.currentLocation
             var isCurrentLocationButtonClicked by remember { mutableStateOf(false) }
-            val bottomSheetState = rememberStandardBottomSheetState()
+            val bottomSheetState = rememberStandardBottomSheetState(confirmValueChange = { it != SheetValue.Hidden})
             val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
             val sheetState by rememberUpdatedState(scaffoldState.bottomSheetState)
 
@@ -61,6 +62,7 @@ class MainActivity : ComponentActivity() {
                     isNeededToMoveCurrentLocation = isCurrentLocationButtonClicked,
                     scaffoldState = scaffoldState,
                     showMapControls = sheetState.currentValue == SheetValue.PartiallyExpanded,
+                    style = if(isSystemInDarkTheme()) Style.TRAFFIC_NIGHT else Style.TRAFFIC_DAY
                 )
             }
         }

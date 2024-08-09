@@ -1,6 +1,5 @@
 package uz.xml.mytaxiapp.presentation.compose
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,14 +36,11 @@ internal fun AppUi(
     showMapControls: Boolean,
 ) {
     Scaffold(
+        modifier = Modifier.navigationBarsPadding(),
         bottomBar = {
             BottomSheetScaffold(
                 scaffoldState = scaffoldState,
-                sheetContent = { MapBottomSheet( modifier = Modifier.navigationBarsPadding()
-//                    .padding(
-//                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-//                )
-            ) }
+                sheetContent = { MapBottomSheet( modifier = Modifier.navigationBarsPadding()) }
                 ,
                 sheetShape = RoundedCornerShape(0.dp),
                 sheetContainerColor = Color.Transparent,
@@ -56,7 +52,6 @@ internal fun AppUi(
         }
     ) {
         Box(modifier = modifier) {
-            Log.d("TAG", "AppUi: ")
             MapView(
                 modifier = Modifier.navigationBarsPadding().statusBarsPadding(),
                 mapViewportState = mapViewportState,

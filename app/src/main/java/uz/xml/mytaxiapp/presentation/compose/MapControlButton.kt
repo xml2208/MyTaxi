@@ -1,8 +1,8 @@
 package uz.xml.mytaxiapp.presentation.compose
 
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,10 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,11 +34,9 @@ fun MapControlButtons(
     ) {
         MapControlButton(
             modifier = Modifier
-                .background(
-                    color = colorResource(R.color.chevron_bcg),
-                    shape = RoundedCornerShape(14.dp)
-                ),
-            icon = R.drawable.ic_chevrons, iconTint = R.color.map_control_button_gray,
+                .border(4.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(14.dp)),
+            icon = R.drawable.ic_chevrons,
+            backgroundColor = MaterialTheme.colorScheme.background,
             onClick = { }
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -46,17 +45,15 @@ fun MapControlButtons(
         ) {
             MapControlButton(
                 icon = R.drawable.ic_plus,
-                iconTint = R.color.map_control_button_gray,
                 onClick = zoomIn
             )
             MapControlButton(
                 icon = R.drawable.ic_minus,
-                iconTint = R.color.map_control_button_gray,
                 onClick = zoomOut
             )
             MapControlButton(
                 icon = R.drawable.current_location,
-                iconTint = R.color.map_control_button_,
+                iconTint = MaterialTheme.colorScheme.primary,
                 onClick = moveToCurrentLocation
             )
         }
@@ -65,24 +62,25 @@ fun MapControlButtons(
 
 @Composable
 fun MapControlButton(
-    @DrawableRes icon: Int,
-    @ColorRes iconTint: Int,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    @DrawableRes icon: Int,
+    iconTint: Color = MaterialTheme.colorScheme.onSecondary,
+    backgroundColor: Color = MaterialTheme.colorScheme.onBackground,
 ) {
     Box(
         modifier = modifier
             .size(56.dp)
-            .clickable(onClick = onClick)
             .background(
-                color = colorResource(id = R.color.white),
+                color = backgroundColor,
                 shape = RoundedCornerShape(14.dp)
             )
+            .clickable(onClick = onClick)
     ) {
         Icon(
             modifier = Modifier.align(Alignment.Center),
             painter = painterResource(id = icon),
-            tint = colorResource(id = iconTint),
+            tint = iconTint,
             contentDescription = null
         )
     }
@@ -91,5 +89,5 @@ fun MapControlButton(
 @Preview
 @Composable
 private fun CurrentLocationButton() {
-    MapControlButton(icon = R.drawable.current_location, 0, {})
+    MapControlButton(icon = R.drawable.current_location, onClick = {})
 }

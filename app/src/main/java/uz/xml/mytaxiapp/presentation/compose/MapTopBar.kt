@@ -3,20 +3,23 @@ package uz.xml.mytaxiapp.presentation.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,9 +32,9 @@ import uz.xml.mytaxiapp.R
 fun MapTopBar(
     modifier: Modifier,
 ) {
-    val selectedText = remember { mutableStateOf(0) }
-    val text1Selected = selectedText.value == 0
-    val text2Selected = selectedText.value == 1
+    var selectedText by remember { mutableIntStateOf(0) }
+    val text1Selected = selectedText == 0
+    val text2Selected = selectedText == 1
 
     Row(
         modifier = modifier.wrapContentHeight(),
@@ -40,27 +43,28 @@ fun MapTopBar(
     ) {
         MapControlButton(
             icon = R.drawable.ic_hamburger,
-            iconTint = R.color.black, onClick = { }
+            iconTint = MaterialTheme.colorScheme.onPrimary,
+            onClick = { }
         )
         Row(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(14.dp))
+                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(14.dp))
                 .padding(4.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             TopBarText(
                 isSelected = text1Selected,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).background(MaterialTheme.colorScheme.onBackground),
                 text = stringResource(id = R.string.busy),
-                onClick = { selectedText.value = 0 }
+                onClick = { selectedText = 0 }
             )
             TopBarText(
                 isSelected = text2Selected,
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.active),
-                onClick = { selectedText.value = 1 }
+                onClick = { selectedText = 1 }
             )
         }
 
@@ -70,8 +74,8 @@ fun MapTopBar(
             style = TextStyle(fontWeight = FontWeight.Bold),
             color = Color.Black,
             modifier = Modifier
-                .background(colorResource(id = R.color.green), RoundedCornerShape(14.dp))
-                .border(4.dp, Color.White, RoundedCornerShape(14.dp))
+                .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(14.dp))
+                .border(4.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(14.dp))
                 .padding(18.dp)
         )
     }
@@ -83,16 +87,18 @@ private fun TopBarText(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isInDarkMode: Boolean = isSystemInDarkTheme()
 ) {
     Text(
         modifier = modifier
             .background(
-                color = colorResource(id = if (isSelected) R.color.green else R.color.white),
+                color = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
             )
             .clickable(onClick = onClick)
             .padding(horizontal = 25.5.dp, vertical = (13).dp),
         text = text,
+        color = if (!isSelected && isInDarkMode) Color.White else Color.Black,
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
         fontWeight = if (isSelected) FontWeight.Bold else null

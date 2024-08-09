@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,13 +42,13 @@ fun MapBottomSheet(modifier: Modifier) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
-            color = colorResource(id = R.color.white)
+            color = MaterialTheme.colorScheme.onBackground
         ) {
             Column(
                 modifier = Modifier
                     .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .background(
-                        color = colorResource(id = R.color.chevron_bcg),
+                        color = MaterialTheme.colorScheme.background,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .padding(horizontal = 16.dp),
@@ -59,20 +59,24 @@ fun MapBottomSheet(modifier: Modifier) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_tariff),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                     Text(
                         text = stringResource(id = R.string.tarif),
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = "6/8",
-                        fontSize = 18.sp
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 18.sp,
                     )
                     Icon(
                         modifier = Modifier.padding(start = 9.dp),
                         painter = painterResource(id = R.drawable.ic_chevron),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                 }
@@ -83,20 +87,24 @@ fun MapBottomSheet(modifier: Modifier) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_order),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                     Text(
                         text = stringResource(id = R.string.orders),
-                        modifier = Modifier.padding(start = 8.dp)
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(start = 8.dp),
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = "0",
-                        fontSize = 18.sp
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 18.sp,
                     )
                     Icon(
                         modifier = Modifier.padding(start = 9.dp),
                         painter = painterResource(id = R.drawable.ic_chevron),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                 }
@@ -107,15 +115,18 @@ fun MapBottomSheet(modifier: Modifier) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_rocket),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                     Text(
                         text = stringResource(id = R.string.bordur),
-                        modifier = Modifier.padding(start = 8.dp)
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(start = 8.dp),
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(
                         painter = painterResource(id = R.drawable.ic_chevron),
+                        tint = MaterialTheme.colorScheme.onSecondary,
                         contentDescription = null
                     )
                 }
