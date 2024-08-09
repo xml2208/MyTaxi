@@ -13,7 +13,6 @@ import com.mapbox.maps.CameraOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 import uz.xml.mytaxiapp.domain.model.MyTaxiLngLt
 import uz.xml.mytaxiapp.domain.usecase.SaveUserLocationUseCase
 import uz.xml.mytaxiapp.presentation.base.BaseViewModel
