@@ -11,6 +11,7 @@ composeBom = "2024.06.00"
 map-box = "11.6.0-rc.1"
 location-services = "21.3.0"
 koin = "4.0.0-RC1"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,10 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 location-services = { group = "com.google.android.gms", name = "play-services-location", version.ref = "location-services" }
 map-box = { group = "com.mapbox.maps", name = "android", version.ref = "map-box" }
 map-box-compose = { group = "com.mapbox.extension", name = "maps-compose", version.ref = "map-box" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room = { module = "androidx.room:room-ktx", version.ref = "room"}
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

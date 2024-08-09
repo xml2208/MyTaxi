@@ -13,10 +13,14 @@ import com.mapbox.maps.CameraOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import uz.xml.mytaxiapp.data.di.MyTaxiLngLt
+import org.koin.compose.koinInject
+import uz.xml.mytaxiapp.domain.model.MyTaxiLngLt
+import uz.xml.mytaxiapp.domain.usecase.SaveUserLocationUseCase
 import uz.xml.mytaxiapp.presentation.base.BaseViewModel
 
-class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
+class MainViewModel(
+    private val userLocationUseCase: SaveUserLocationUseCase
+) : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
 
     private val _cameraOptions = MutableStateFlow<CameraOptions?>(null)
     val cameraOptions = _cameraOptions.asStateFlow()
@@ -63,19 +67,8 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
         LocationServices.getFusedLocationProviderClient(context)
 
     private fun getCurrentLocation(activity: Activity) {
-        if (ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-            )
+        if (!hasUserLocationPermission(activity = activity)) {
+            requestPermission(activity = activity)
         } else {
             fusedLocationClient(activity).lastLocation.addOnSuccessListener { location ->
                 location?.let {
@@ -83,9 +76,24 @@ class MainViewModel : BaseViewModel<MyTaxiViewState, MyTaxiViewEvents>() {
                         MyTaxiLngLt(latitude = location.latitude, longitude = location.longitude)
                     setState { MyTaxiViewState(currentLocation = _currentLocation.value) }
                 }
+                viewModelScope.launch { userLocationUseCase.invoke(location.longitude, location.latitude) }
             }
         }
     }
+
+    private fun hasUserLocationPermission(activity: Activity) = ActivityCompat.checkSelfPermission(
+        activity,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        activity,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestPermission(activity: Activity) = ActivityCompat.requestPermissions(
+        activity,
+        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        1
+    )
 
     companion object {
         const val DEFAULT_ZOOM_CITY_VIEW = 6.0

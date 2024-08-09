@@ -1,4 +1,4 @@
-package uz.xml.mytaxiapp.data.di
+package uz.xml.mytaxiapp.domain.model
 
 data class MyTaxiLngLt(
     val longitude: Double,
